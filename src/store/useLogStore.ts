@@ -27,7 +27,7 @@ export const useLogStore = create<LogState>()((set, get) => ({
   logs: [],
   loading: false,
   total: 0,
-  pageNum: 1,
+  pageNum: 0,
   pageSize: 5,
   
   fetchLogs: async (params?: LaborAllocationLogQueryDTO) => {
@@ -48,14 +48,9 @@ export const useLogStore = create<LogState>()((set, get) => ({
     set({ loading: true })
     try {
       const response = await getLaborAllocationLogs(queryParams)
-      console.log('API响应:', response)
-      
       // 检查响应状态
       if (response && response.status === 0 && response.result) {
         const { records, total } = response.result
-        console.log('日志记录:', records)
-        console.log('总数:', total)
-        
         const logs: LogItem[] = records.map((log: LaborAllocationLogRecordDTO) => {
           let allocationSummary = ''
           let projectDetails = ''
@@ -107,8 +102,8 @@ export const useLogStore = create<LogState>()((set, get) => ({
         set({ 
           logs, 
           total: total || 0,
-          pageNum: queryParams.pageNum || 1,
-          pageSize: queryParams.pageSize || 10,
+          pageNum: queryParams.pageNum || 0,
+          pageSize: queryParams.pageSize || 5,
           loading: false 
         })
       } else {

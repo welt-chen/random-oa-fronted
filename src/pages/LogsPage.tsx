@@ -17,7 +17,7 @@ export default function LogsPage() {
   
   // 查询参数
   const [queryParams, setQueryParams] = useState<LaborAllocationLogQueryDTO>({
-    pageNum: 1,
+    pageNum: 0,
     pageSize: 5
   });
 
@@ -132,14 +132,14 @@ export default function LogsPage() {
         {logs.length > 0 && (
           <div className="flex items-center justify-between">
             <div className="text-sm text-muted-foreground">
-              共 {total} 条记录，当前第 {pageNum} 页
+              共 {total} 条记录，当前第 {pageNum + 1} 页
             </div>
             <div className="flex space-x-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handlePageChange(pageNum - 1)}
-                disabled={pageNum <= 1 || loading}
+                disabled={pageNum <= 0 || loading}
               >
                 上一页
               </Button>
@@ -147,7 +147,7 @@ export default function LogsPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => handlePageChange(pageNum + 1)}
-                disabled={pageNum * pageSize >= total || loading}
+                disabled={(pageNum + 1) * pageSize >= total || loading}
               >
                 下一页
               </Button>

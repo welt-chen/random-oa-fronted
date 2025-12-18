@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
-import { List, Zap, Plus } from "lucide-react";
+import { Zap } from "lucide-react";
 import type { LaborProjectRecordDTO } from "@/types/api";
 import { ProjectStatus } from "./LaborProjectTable";
 import { LaborProjectListDialog } from "./LaborProjectListDialog";
@@ -9,6 +9,7 @@ import { LaborProjectDialog } from "./LaborProjectDialog";
 import { InjuryStatus, type User } from "../usermanage/UserTable";
 import { allocateLabor } from "@/api/index";
 import { useProjectStore } from "@/store/useProjectStore";
+import { useUserStore } from "@/store/useUserStore";
 
 interface LaborExtractionSectionProps {
   onAllocationComplete: (result: AllocationResult) => void;
@@ -40,6 +41,9 @@ export function LaborExtractionSection({
   users = [],
 }: LaborExtractionSectionProps) {
   const { projects, fetchProjects, deleteProject } = useProjectStore();
+  const { users: storeUsers, fetchUsers } = useUserStore();
+
+  const actualUsers = users.length > 0 ? users : storeUsers;
 
   const [projectListOpen, setProjectListOpen] = useState(false);
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
@@ -48,9 +52,13 @@ export function LaborExtractionSection({
   const [isAllocating, setIsAllocating] = useState(false);
   const [allocationResult, setAllocationResult] =
     useState<AllocationResult | null>(null);
+  
   useEffect(() => {
+    if (users.length === 0) {
+      fetchUsers();
+    }
     fetchProjects();
-  }, []);
+  }, [users.length, fetchUsers, fetchProjects]);
 
   const handleAddProject = () => {
     setCurrentProject(null);
@@ -83,8 +91,8 @@ export function LaborExtractionSection({
       return;
     }
 
-    // 获取所有健康状态的用户（排除病假和重伤）
-    const availableUsers = users.filter(
+    // 获取所有健康状态的用户 
+    const availableUsers = actualUsers.filter(
       (u) =>
         u.injuryStatus === InjuryStatus.HEALTHY ||
         u.injuryStatus === InjuryStatus.MINOR_INJURY
