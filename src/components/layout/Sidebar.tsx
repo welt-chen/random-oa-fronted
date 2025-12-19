@@ -70,7 +70,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
   return (
     <div className={cn(
       "flex flex-col h-full bg-background border-r transition-all duration-300",
-      isCollapsed ? "w-16" : "w-64"
+      isCollapsed ? "w-14" : "w-48"
     )}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
@@ -88,9 +88,9 @@ export function Sidebar({ onLogout }: SidebarProps) {
       </div>
 
       {/* User Section */}
-      <div className="p-4 border-b">
+      <div className="flex items-start justify-start ml-4 p-3 border-b">
         {isAuthenticated ? (
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <div className="flex-shrink-0">
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <User className="h-4 w-4 text-primary-foreground" />
@@ -124,7 +124,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-3 space-y-2 flex flex-col items-center">
         {menuItems.map((item) => {
           const Icon = item.icon
           const isActive = location.pathname === item.path || (location.pathname === '/' && item.path === '/lottery')
@@ -156,24 +156,24 @@ export function Sidebar({ onLogout }: SidebarProps) {
       </nav>
 
       {/* Login/Logout Section */}
-      <div className="p-4 border-t">
+      <div className="p-3 border-t flex justify-center">
         {isAuthenticated ? (
           <Button
             variant="ghost"
-            className={cn("w-full justify-start", isCollapsed && "justify-center px-2")}
+            className={cn("w-full justify-center", !isCollapsed && "justify-start")}
             onClick={handleLogout}
           >
             <LogOut className="h-4 w-4" />
-            {!isCollapsed && <span className="ml-2">退出登录</span>}
+            {!isCollapsed && <span className="ml-2 text-xs">退出登录</span>}
           </Button>
         ) : (
           <Button
             variant="default"
-            className={cn("w-full justify-start", isCollapsed && "justify-center px-2")}
+            className={cn("w-full justify-center", !isCollapsed && "justify-start")}
             onClick={() => setLoginDialogOpen(true)}
           >
             <LogIn className="h-4 w-4" />
-            {!isCollapsed && <span className="ml-2">登录</span>}
+            {!isCollapsed && <span className="ml-2 text-xs">登录</span>}
           </Button>
         )}
       </div>

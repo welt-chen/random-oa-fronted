@@ -68,8 +68,8 @@ export function LaborProjectDialog({
       return;
     }
 
-    if (formData.requiredLaborValue < 0) {
-      toast.error("所需劳动值不能为负数");
+    if (formData.requiredLaborValue < 0 || formData.requiredLaborValue > 100) {
+      toast.error("所需劳动值必须在0-100之间");
       return;
     }
 
@@ -89,19 +89,22 @@ export function LaborProjectDialog({
           toast.success("更新成功", {
             description: `${formData.projectName} 已更新`,
           });
+          onOpenChange(false);
         } else {
           toast.error("更新失败");
         }
       } else {
-        // 创建项目
         success = await addProject({
           projectName: formData.projectName,
           workDescription: formData.workDescription,
           requiredLaborValue: formData.requiredLaborValue,
         });
         if (success) {
-          toast.success("创建成功", {
-            description: `${formData.projectName} 已创建`,
+          toast.success("创建成功");
+          setFormData({
+            projectName: "",
+            workDescription: "",
+            requiredLaborValue: 0,
           });
         } else {
           toast.error("创建失败");
@@ -110,7 +113,6 @@ export function LaborProjectDialog({
 
       if (success) {
         onSave();
-        onOpenChange(false);
       }
     } catch (error) {
       console.error(isEdit ? "更新项目失败:" : "创建项目失败:", error);
@@ -176,6 +178,7 @@ export function LaborProjectDialog({
                 placeholder="请输入所需劳动值"
                 disabled={isLoading}
                 min="0"
+                max="100"
               />
             </div>
           </div>

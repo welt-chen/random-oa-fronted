@@ -76,8 +76,8 @@ export function UserDialog({ open, onOpenChange, user, onSave }: UserDialogProps
       return
     }
 
-    if (formData.laborValue < 0) {
-      toast.error('劳动值不能为负数')
+    if (formData.laborValue < 0 || formData.laborValue > 100) {
+      toast.error('劳动值必须在0-100之间')
       return
     }
 
@@ -95,7 +95,20 @@ export function UserDialog({ open, onOpenChange, user, onSave }: UserDialogProps
         injuryStatus: formData.injuryStatus,
       }
       onSave(userData)
-      onOpenChange(false)
+      if (!isEdit) {
+        setFormData({
+          realName: '',
+          birthDate: '',
+          jobPosition: Position.DEVELOPER,
+          laborValue: 0,
+          injuryStatus: InjuryStatus.HEALTHY,
+        })
+        toast.success('用户添加成功')
+      } else {
+        // 编辑完成后关闭弹窗
+        onOpenChange(false)
+        toast.success('用户更新成功')
+      }
     } catch (error) {
       console.error('准备保存用户失败：', error)
       toast.error(isEdit ? '更新失败' : '创建失败', {
@@ -167,6 +180,7 @@ export function UserDialog({ open, onOpenChange, user, onSave }: UserDialogProps
                   placeholder="请输入劳动值"
                   disabled={isLoading}
                   min="0"
+                  max="100"
                 />
               </div>
             </div>

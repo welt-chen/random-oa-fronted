@@ -30,8 +30,6 @@ export function LoginDialog({
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -133,18 +131,6 @@ export function LoginDialog({
                   <Eye className="h-4 w-4" />
                 )}
               </button>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="remember"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded border-border"
-                disabled={isLoading}
-              />
             </div>
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
