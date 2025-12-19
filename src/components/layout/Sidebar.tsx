@@ -39,7 +39,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
       id: 'lottery',
       label: '抽签',
       icon: Shuffle,
-      path: '/lottery',
+      path: '/',
       requiresAuth: true
     },
     {

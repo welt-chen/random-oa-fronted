@@ -76,8 +76,8 @@ export function UserDialog({ open, onOpenChange, user, onSave }: UserDialogProps
       return
     }
 
-    if (formData.laborValue < 0 || formData.laborValue > 300) {
-      toast.error('劳动值必须在0-300之间')
+    if (formData.laborValue < 0) {
+      toast.error('劳动值必须大于等于0')
       return
     }
 
@@ -180,7 +180,6 @@ export function UserDialog({ open, onOpenChange, user, onSave }: UserDialogProps
                   placeholder="请输入劳动值"
                   disabled={isLoading}
                   min="0"
-                  max="300"
                 />
               </div>
             </div>

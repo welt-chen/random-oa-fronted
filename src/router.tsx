@@ -14,10 +14,6 @@ const router = createBrowserRouter([
         element: <LotteryPage />,
       },
       {
-        path: "lottery",
-        element: <LotteryPage />,
-      },
-      {
         path: "employees",
         element: <EmployeeManagementPage />,
       },

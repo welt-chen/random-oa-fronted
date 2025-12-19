@@ -68,8 +68,8 @@ export function LaborProjectDialog({
       return;
     }
 
-    if (formData.requiredLaborValue < 0 || formData.requiredLaborValue > 300) {
-      toast.error("所需劳动值必须在0-300之间");
+    if (formData.requiredLaborValue < 0) {
+      toast.error("所需劳动值必须大于等于0");
       return;
     }
 
@@ -178,7 +178,6 @@ export function LaborProjectDialog({
                 placeholder="请输入所需劳动值"
                 disabled={isLoading}
                 min="0"
-                max="300"
               />
             </div>
           </div>

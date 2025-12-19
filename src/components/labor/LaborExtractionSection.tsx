@@ -47,6 +47,28 @@ export function LaborExtractionSection({
   const [isAllocating, setIsAllocating] = useState(false);
   const [allocationResult, setAllocationResult] =
     useState<AllocationResult | null>(null);
+
+  // 清除缓存的函数
+  const clearCachedResult = () => {
+    sessionStorage.removeItem('lotteryAllocationResult');
+    setAllocationResult(null);
+    console.log('已清除sessionStorage中的抽签结果缓存');
+  };
+  
+  // 从sessionStorage恢复缓存的抽签结果
+  useEffect(() => {
+    const cachedResult = sessionStorage.getItem('lotteryAllocationResult');
+    if (cachedResult) {
+      try {
+        const parsedResult = JSON.parse(cachedResult);
+        setAllocationResult(parsedResult);
+        console.log('已从sessionStorage恢复抽签结果缓存');
+      } catch (error) {
+        console.warn('解析缓存的抽签结果失败:', error);
+        sessionStorage.removeItem('lotteryAllocationResult');
+      }
+    }
+  }, []);
   
   useEffect(() => {
     if (users.length === 0) {
@@ -85,6 +107,15 @@ export function LaborExtractionSection({
         const result: AllocationResult = response.result;
         setAllocationResult(result);
         onAllocationComplete(result);
+        
+        // 将结果缓存到sessionStorage
+        try {
+          sessionStorage.setItem('lotteryAllocationResult', JSON.stringify(result));
+          console.log('抽签结果已缓存到sessionStorage');
+        } catch (error) {
+          console.warn('缓存抽签结果失败:', error);
+        }
+        
         const totalEmployees = result.allocationResults.reduce((sum, project) => 
           sum + project.allocatedEmployees.length, 0
         );
@@ -179,7 +210,16 @@ export function LaborExtractionSection({
           {/* 分配结果展示 */}
           {allocationResult && (
             <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="text-lg font-semibold mb-4">抓阄结果</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">抓阄结果</h3>
+                <Button
+                  size="sm"
+                  onClick={clearCachedResult}
+                  className="text-muted-foreground"
+                >
+                  重新分配
+                </Button>
+              </div>
 
               <div className="space-y-3">
                 {allocationResult.allocationResults.map((project, index) => (
