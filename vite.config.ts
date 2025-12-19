@@ -26,39 +26,12 @@ export default defineConfig(({ mode }) => {
       esbuild: {
         drop: ["console", "debugger"],
       },
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
           chunkFileNames: "js/[name]-[hash].js",
           entryFileNames: "js/[name]-[hash].js",
           assetFileNames: "[ext]/[name]-[hash].[ext]",
-          manualChunks(id) {
-            if (!id.includes("node_modules")) return;
-            if (
-              id.includes("react") ||
-              id.includes("react-dom") ||
-              id.includes("react-router-dom")
-            ) {
-              return "react-vendor";
-            }
-            if (id.includes("framer-motion")) {
-              return "framer-motion";
-            }
-            if (
-              id.includes("@radix-ui") ||
-              id.includes("vaul") ||
-              id.includes("sonner") ||
-              id.includes("lucide-react") ||
-              id.includes("class-variance-authority") ||
-              id.includes("clsx")
-            ) {
-              return "ui-vendor";
-            }
-            if (id.includes("axios") || id.includes("zustand")) {
-              return "utils-vendor";
-            }
-            return "vendor";
-          },
         },
       },
     },
