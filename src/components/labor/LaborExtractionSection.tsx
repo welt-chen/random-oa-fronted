@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
-import { Zap, Loader2 } from "lucide-react";
-import type { LaborProjectRecordDTO } from "@/types/api";
+import { Zap } from "lucide-react";
+import Lottie from "lottie-react";
+import catLoadingAnimation from "@/lottie/cat Mark loading.json";
 import { ProjectStatus } from "./LaborProjectTable";
 import { InjuryStatus, type User } from "../usermanage/UserTable";
 import { allocateLabor } from "@/api/index";
@@ -43,7 +44,6 @@ export function LaborExtractionSection({
 
   const actualUsers = users.length > 0 ? users : storeUsers;
 
-    useState<LaborProjectRecordDTO | null>(null);
   const [isAllocating, setIsAllocating] = useState(false);
   const [allocationResult, setAllocationResult] =
     useState<AllocationResult | null>(null);
@@ -79,37 +79,25 @@ export function LaborExtractionSection({
     setIsAllocating(true);
 
     try {
-      // 调用批量分配接口，一次性分配所有待分配项目
-      const response = await allocateLabor({}); // 空对象表示分配所有待分配项目
-
-      // 检查后端返回的status，0表示成功
+      const response = await allocateLabor({}); 
+      await new Promise(resolve => setTimeout(resolve, 3000));
       if (response.status === 0) {
-        // 直接使用后端返回的完整数据结构
         const result: AllocationResult = response.result;
-        
         setAllocationResult(result);
         onAllocationComplete(result);
-
-        // 计算总分配员工数量
         const totalEmployees = result.allocationResults.reduce((sum, project) => 
           sum + project.allocatedEmployees.length, 0
         );
-        
         toast.success("分配成功", {
           description: `成功分配 ${result.totalProjects} 个项目，共 ${totalEmployees} 名员工`,
         });
-
-        // 重新加载项目列表
         await fetchProjects(true);
       } else {
-        // status不为0，表示后端返回了错误
-        console.error("分配失败，后端返回status:", response.status, "消息:", response.msg);
         toast.error("分配失败", {
           description: response.msg || "未知错误",
         });
       }
     } catch (error) {
-      console.error("分配失败:", error);
       toast.error("分配失败", {
         description: "网络请求失败",
       });
@@ -120,20 +108,21 @@ export function LaborExtractionSection({
 
   return (
     <div className="relative">
-      {/* 全屏Loading遮罩 */}
+      {/* 全屏Lottie动画遮罩 */}
       {isAllocating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-lg p-8 shadow-xl flex flex-col items-center space-y-4">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <div className="bg-white rounded-lg p-8 shadow-xl flex flex-col items-center space-y-4 max-w-sm">
+            <div className="w-32 h-32">
+              <Lottie animationData={catLoadingAnimation} loop={true} />
+            </div>
             <div className="text-lg font-semibold">正在抓阄分配中...</div>
-            <div className="text-sm text-muted-foreground">请稍候，系统正在为员工分配工作</div>
+            <div className="text-sm text-muted-foreground">猫咪正在努力为您分配工作，请稍候</div>
           </div>
         </div>
       )}
       
       <div>
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-1">工作抓阄系统</h1>
           <p className="text-sm text-muted-foreground">
             通过智能算法进行公平的劳动分配
           </p>

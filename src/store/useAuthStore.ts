@@ -30,7 +30,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const token = getToken();
       const user = getCurrentUser();
-      
       if (token && user) {
         set({
           token,
@@ -39,9 +38,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           isLoading: false,
         });
       } else {
-        // 如果没有token或用户信息，清除可能存在的残留数据
         if (token && !user) {
-          authLogout(); // 清除残留的token
+          authLogout(); 
         }
         set({
           token: null,

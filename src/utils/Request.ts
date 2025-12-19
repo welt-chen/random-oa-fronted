@@ -5,6 +5,7 @@ import axios, {
   type AxiosRequestConfig,
 } from "axios";
 import { toast } from "sonner";
+import { getToken } from "@/utils/auth";
 
 const service: AxiosInstance = axios.create({
   baseURL: "http://115.190.219.146:9010",
@@ -15,7 +16,7 @@ const service: AxiosInstance = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('token')
+    const token = getToken()
     if (token) {
       config.headers = config.headers || {}
       config.headers["Authorization"] = `${token}`

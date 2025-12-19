@@ -68,12 +68,4 @@
   }
 }
 
-/* 自定义动画 */
-@keyframes glow {
-  from {
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-  }
-  to {
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.8), 0 0 60px rgba(102, 126, 234, 0.6);
-  }
-}
+

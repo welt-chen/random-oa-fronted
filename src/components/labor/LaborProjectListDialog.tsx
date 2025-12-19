@@ -29,7 +29,7 @@ export function LaborProjectListDialog({
 }: LaborProjectListDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[95vh] overflow-y-auto max-w-5xl w-[95vw] min-h-[50vh]">
         <DialogHeader>
           <DialogTitle>劳动项目列表</DialogTitle>
           <DialogDescription>查看和管理所有劳动项目</DialogDescription>
@@ -42,7 +42,6 @@ export function LaborProjectListDialog({
             onEdit={onEdit}
             onDelete={onDelete}
           />
-
           {/* 底部信息和添加按钮 */}
           <div className="flex items-center justify-between">
             <div className="text-sm text-muted-foreground">

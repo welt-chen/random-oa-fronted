@@ -65,7 +65,7 @@ export default function ProjectManagementPage() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">项目管理</h1>
+        <h1 className="text-2xl font-bold mb-1">项目管理</h1>
             <p className="text-muted-foreground">
               创建、编辑和管理劳动项目
             </p>

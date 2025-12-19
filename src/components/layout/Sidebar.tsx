@@ -10,7 +10,6 @@ import {
   LogOut, 
   LogIn,
   User,
-  FileText,
   Settings,
   ChevronLeft,
   ChevronRight
@@ -26,7 +25,6 @@ export function Sidebar({ onLogout }: SidebarProps) {
   const { isAuthenticated, user, logout } = useAuthStore()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [loginDialogOpen, setLoginDialogOpen] = useState(false)
-
   const handleLogout = () => {
     logout()
     onLogout?.()
@@ -57,13 +55,6 @@ export function Sidebar({ onLogout }: SidebarProps) {
       icon: Settings,
       path: '/project-management',
       requiresAuth: true
-    },
-    {
-      id: 'logs',
-      label: '操作日志',
-      icon: FileText,
-      path: '/logs',
-      requiresAuth: true
     }
   ]
 
@@ -73,7 +64,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
       isCollapsed ? "w-14" : "w-48"
     )}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center justify-between border-b p-3">
         {!isCollapsed && (
           <h2 className="text-lg font-semibold">劳动管理系统</h2>
         )}
@@ -81,14 +72,13 @@ export function Sidebar({ onLogout }: SidebarProps) {
           variant="ghost"
           size="sm"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1"
         >
           {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
       </div>
 
       {/* User Section */}
-      <div className="flex items-start justify-start ml-4 p-3 border-b">
+      <div className="flex items-start justify-start p-3 border-b">
         {isAuthenticated ? (
           <div className="flex items-center space-x-2">
             <div className="flex-shrink-0">
@@ -124,7 +114,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 p-3 space-y-2 flex flex-col items-center">
+      <nav className="flex-1 py-3 gap-2 flex flex-col items-center">
         {menuItems.map((item) => {
           const Icon = item.icon
           const isActive = location.pathname === item.path || (location.pathname === '/' && item.path === '/lottery')
@@ -149,7 +139,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
               disabled={isDisabled}
             >
               <Icon className="h-4 w-4" />
-              {!isCollapsed && <span className="ml-2">{item.label}</span>}
+              {!isCollapsed && <span>{item.label}</span>}
             </Button>
           )
         })}
