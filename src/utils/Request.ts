@@ -42,8 +42,10 @@ service.interceptors.response.use(
     return res;
   },
   (error) => {
-    console.error("Response error:", error.message);
-    toast.error(error.message || "网络请求失败");
+    // 获取后端返回的错误信息（即使HTTP状态码是500）
+    const errorMessage = error.response?.data?.msg || error.message || "网络请求失败";
+    console.error("Response error:", errorMessage);
+    toast.error(errorMessage);
     return Promise.reject(error);
   }
 );
