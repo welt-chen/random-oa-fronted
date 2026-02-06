@@ -102,40 +102,33 @@ export function LaborExtractionSection({
     setIsAllocating(true);
 
     try {
-      const response = await allocateLabor({}); 
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      if (response.status === 0) {
-        const result: AllocationResult = response.result;
-        setAllocationResult(result);
-        onAllocationComplete(result);
-        
-        // 将结果缓存到sessionStorage
-        try {
-          sessionStorage.setItem('lotteryAllocationResult', JSON.stringify(result));
-          console.log('抽签结果已缓存到sessionStorage');
-        } catch (error) {
-          console.warn('缓存抽签结果失败:', error);
-        }
-        
-        const totalEmployees = result.allocationResults.reduce((sum, project) => 
-          sum + project.allocatedEmployees.length, 0
+      const response = await allocateLabor({});
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      // status !== 0 已被拦截器 reject，此处仅为 status === 0
+      const result: AllocationResult = response.result;
+      setAllocationResult(result);
+      onAllocationComplete(result);
+      try {
+        sessionStorage.setItem(
+          "lotteryAllocationResult",
+          JSON.stringify(result)
         );
-        toast.success("分配成功", {
-          description: `成功分配 ${result.totalProjects} 个项目，共 ${totalEmployees} 名员工`,
-        });
-        await fetchProjects(true);
-      } else {
-        toast.error("分配失败", {
-          description: response.msg || "未知错误",
-        });
+      } catch {
+        // 忽略缓存写入失败
       }
+      const totalEmployees = result.allocationResults.reduce(
+        (sum, project) => sum + project.allocatedEmployees.length,
+        0
+      );
+      toast.success("分配成功", {
+        description: `成功分配 ${result.totalProjects} 个项目，共 ${totalEmployees} 名员工`,
+      });
+      await fetchProjects(true);
     } catch (error) {
-      const errorMessage =
+      const msg =
         (error as { response?: { data?: { msg?: string } } })?.response?.data
-          ?.msg ||
-        (error as Error)?.message ||
-        "网络请求失败";
-      toast.error(errorMessage);
+          ?.msg ?? (error as Error)?.message ?? "请求失败";
+      toast.error(msg);
     } finally {
       setIsAllocating(false);
     }
