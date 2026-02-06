@@ -9,8 +9,8 @@ import { getToken, logout as authLogout } from "@/utils/auth";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const service: AxiosInstance = axios.create({
-  baseURL: "http://115.190.219.146:9010",
-  // baseURL: "http://localhost:9010",
+  // baseURL: "http://115.190.219.146:9010",
+  baseURL: "http://localhost:9010",
   timeout: 15000, // 超时时间15秒
 });
 
@@ -72,24 +72,21 @@ service.interceptors.response.use(
     }
     // 根据后端返回格式，status 为 0 表示成功
     if (res.status !== 0) {
-      console.error("Response error:", res.msg || "Unknown error");
-      toast.error(res.msg || "请求失败");
-      return Promise.reject(new Error(res.msg || "Unknown error"));
+      const msg = res.msg || "请求失败";
+      console.error("Response error:", msg);
+      toast.error(msg);
+      return Promise.reject(new Error(msg));
     }
     return res;
   },
   (error) => {
-    // 获取后端返回的错误信息（即使HTTP状态码是500）
     const errorStatus = error.response?.data?.status;
     const isAuthError = errorStatus === 401 && !isLoginRequest(error.response?.config?.url);
     if (isAuthError) {
       redirectToLogin(error.response?.data?.msg || "登录失效");
     }
-    const errorMessage = error.response?.data?.msg || error.message || "网络请求失败";
-    console.error("Response error:", errorMessage);
-    if (!isAuthError) {
-      toast.error(errorMessage);
-    }
+    // 不在此处 toast，避免与业务 catch 重复弹窗；业务可依据 error.response?.data?.msg 自行展示
+    console.error("Response error:", error.response?.data?.msg ?? error.message ?? "网络请求失败");
     return Promise.reject(error);
   }
 );

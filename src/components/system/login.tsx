@@ -78,9 +78,7 @@ export function LoginDialog({
       }
     } catch (error) {
       console.error("登录请求失败：", error);
-      toast.error("登录失败", {
-        description: "网络连接失败，请稍后重试",
-      });
+ 
     } finally {
       setIsLoading(false);
     }

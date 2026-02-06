@@ -130,9 +130,12 @@ export function LaborExtractionSection({
         });
       }
     } catch (error) {
-      toast.error("分配失败", {
-        description: "网络请求失败",
-      });
+      const errorMessage =
+        (error as { response?: { data?: { msg?: string } } })?.response?.data
+          ?.msg ||
+        (error as Error)?.message ||
+        "网络请求失败";
+      toast.error(errorMessage);
     } finally {
       setIsAllocating(false);
     }
