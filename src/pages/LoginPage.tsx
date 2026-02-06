@@ -113,9 +113,9 @@ export default function LoginPage() {
           </p>
 
           <div className="login-tags login-reveal delay-5">
-            <span>白名单启封</span>
-            <span>令牌巡游</span>
-            <span>审计校验中</span>
+            <span>圣契启封</span>
+            <span>秘印巡游</span>
+            <span>冥律校验中</span>
           </div>
         </section>
 
@@ -192,7 +192,7 @@ export default function LoginPage() {
             </form>
 
             <div className="login-footnote">
-              请确保网络环境稳定，登录信息将用于权限审计。
+              灵网若动荡，仪式即断；秘钥回响将纳入冥律裁决。
             </div>
           </div>
         </section>
