@@ -1,0 +1,31 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t random-oa-frontend:latest .
+
+      - name: Stop and remove old container
+        run: |
+          docker stop random-oa-frontend || true
+          docker rm random-oa-frontend || true
+
+      - name: Run new container
+        run: docker run -d --name random-oa-frontend -p 8877:8877 --restart unless-stopped random-oa-frontend:latest
+
+      - name: Wait for application to start
+        run: |
+          echo "Waiting for application to start..."
+          sleep 10
+          docker ps | grep random-oa-frontend
+          docker logs --tail 20 random-oa-frontend
