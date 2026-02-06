@@ -1,9 +1,11 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { performLogout } from '@/utils/logout'
 import { toast } from 'sonner'
 
 export function MainLayout() {
+  const navigate = useNavigate()
+
   const handleLogout = () => {
     try {
       performLogout()
@@ -11,6 +13,7 @@ export function MainLayout() {
         description: '已清空所有用户数据',
         duration: 2000,
       })
+      navigate('/login', { replace: true })
     } catch (error) {
       console.error('登出失败:', error)
       toast.error('登出失败', {
