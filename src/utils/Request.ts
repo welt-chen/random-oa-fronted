@@ -9,8 +9,8 @@ import { getToken, logout as authLogout } from "@/utils/auth";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const service: AxiosInstance = axios.create({
-  // baseURL: "http://115.190.219.146:9010",
-  baseURL: "http://localhost:9010",
+  baseURL: "http://115.190.219.146:9010",
+  // baseURL: "http://localhost:9010",
   timeout: 15000, // 超时时间15秒
 });
 
